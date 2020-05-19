@@ -1,0 +1,212 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src='d3.v4.min.js'></script>
+
+<!-- Create a div where the graph will take place -->
+<html>
+<head>
+
+<style>
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(50px, auto);
+}
+.two { 
+  grid-column: 1 /3;
+  grid-row: 1;
+  text-align: center;
+}
+.three { 
+  grid-column: 3 /5;
+  grid-row: 1;
+  text-align: center;
+}
+.fourbaslik { 
+  grid-column: 1 /3;
+  grid-row: 2;
+  text-align: center;
+}
+.four { 
+  grid-column: 1 /2;
+  grid-row: 3;
+  text-align: center;
+}
+.five { 
+  grid-column: 2 /3;
+  grid-row: 3;
+  text-align: center;
+}
+.altibaslik { 
+  grid-column: 3 /5;
+  grid-row: 2;
+  text-align: center;
+}
+.alti { 
+  grid-column: 3 /4;
+  grid-row: 3;
+  text-align: center;
+}
+.yedi { 
+  grid-column: 4 /5;
+  grid-row: 3;
+  text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+ 
+  <div class="two" style="background-color: #0dcfc5"; >
+    <span id="title2" style="font-size :40px;font-weight: bold;"> saat = </span>
+    <span id="title3" style="font-size :40px;font-weight: bold;"> aa </span><br>
+    <button id="button button1" onclick="sendData()" style="background-color: rgb(0, 183, 255); font-size : 20px;font-weight: bold;width: 40%; height: 80% ;">Kayıt Basla</button>
+  </div>
+  <div class="three" style="background-color: #0dcfc5"; >
+    <a href="http://192.168.4.1/data6.json" style="font-size :20px;font-weight: bold;color:#2f10dd ;">data6.json</a><br>
+    <a href="http://192.168.4.1/data5.json" style="font-size :20px;font-weight: bold;color:#dadd10 ;">data5.json</a><br>
+    <a href="http://192.168.4.1/index2.html" style="font-size :20px;font-weight: bold;color:#dadd10 ;">index2</a><br>
+  </div>
+  <div class="fourbaslik" style="background-color: #0dcfc5"; >
+    <span id="title6baslik" style="font-size :20px;font-weight: bold;color:#dd10a0 ;">ESP8266 dan gelen data </span>
+  </div>
+  <div class="four" style="background-color: #0dcfc5"; >
+    <span id="title6" style="font-size :12px;font-weight: bold;"> </span>
+    <span id="title7" style="font-size :12px;font-weight: bold;"> </span><br>
+  </div>
+  <div class="five" style="background-color: #0dcfc5"; >
+    <span id="title8" style="font-size :12px;font-weight: bold;color:#ce474e ;"> </span>
+    <span id="title9" style="font-size :12px;font-weight: bold;color:#ce474e ;"> </span><br>
+  </div>
+  <div class="altibaslik" style="background-color: #0dcfc5"; >
+    <span id="title10baslik" style="font-size :20px;font-weight: bold;color:#dd10a0;"> javascipt te zdata ya dönüştürlen data </span>
+  </div>
+  <div class="alti" style="background-color: #0dcfc5"; >
+    <span id="title10" style="font-size :12px;font-weight: bold;"> </span>
+    <span id="title11" style="font-size :12px;font-weight: bold;"> </span><br>
+  </div>
+  <div class="yedi" style="background-color: #0dcfc5"; >
+    <span id="title12" style="font-size :12px;font-weight: bold;color:#ce474e ;"> </span>
+    <span id="title13" style="font-size :12px;font-weight: bold;color:#ce474e ;"> </span><br>
+  </div>
+
+
+
+</div>
+</body>
+</html>
+
+<script>
+
+
+bb =function(a) {
+  var date = new Date(null); 
+    date.setSeconds(a);
+    var saat=date.getHours();
+    date.setHours(saat+1);
+    return date;
+    //return timeString
+  } 
+  
+
+espzamankontrol();
+
+setInterval(aldata,1000);
+
+function aldata(){//2019-11-15 te ekledim setInterval icin
+  d3.json("data5.json",function(data) {
+    if(data){//yeni2019-12-18..data5.json arduino tarafinda sifirlandigi zaman hata aliyordum tarayicida.belki alttaki 2 if kaldirabilirim.
+    if (typeof data !="undefined" ){{//yeni2019-12-18
+      if ( Object.keys(data).length >0){
+  var string1="";    
+  for (zzz in data["x"]) {
+    if( zzz > 1){
+      var string2="data["+"x"+"]["+(zzz)+"]= "+data["x"][zzz]+"<br/>";
+      string1=string1+string2
+    }
+
+  }
+  var string3="";
+  for (zzz in data["x"]) {
+    if( zzz > 1){
+      var string4="data["+"y"+"]["+(zzz)+"]= "+data["y"][zzz]+"<br/>";
+      string3=string3+string4;
+    }
+
+  }
+    document.getElementById("title6").innerHTML=string1
+    document.getElementById("title8").innerHTML=string3;
+  
+  ///////////////////////////////////
+  
+  var zdata=[];
+  for (zzz in data["x"]) {// zdata yi olusturma
+    if( zzz > 1){
+      zdata.push ({"x":bb(data["x"][zzz]),"y":data["y"][zzz]});
+      }
+  }
+  
+  var string5="";
+  for (zzz in zdata){// zdata yi yazdirma
+    
+     var string6="zdata["+zzz+"]["+"x"+"]= "+zdata[zzz]["x"].getHours()+":"+zdata[zzz]["x"].getMinutes()+":"+zdata[zzz]["x"].getSeconds()+":"+"<br/>";
+      string5=string5+string6;
+  }
+  document.getElementById("title10").innerHTML=string5;
+  var string7="";
+  for (zzz in zdata){// zdata yi yazdirma
+    
+     var string8="zdata["+zzz+"]["+"y"+"]= "+zdata[zzz]["y"]+"<br/>";
+      string7=string7+string8;
+  }
+  document.getElementById("title12").innerHTML=string7; 
+  /////////////////////////////////
+} 
+  }
+  } 
+  }
+  })
+  var today = new Date();//sistem zamanini cekiyor butonun ustundeki saat icin
+        document.getElementById("title3").innerHTML=today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  }// aldata fonksiyonun sonu
+
+/////////////////////////////////////////////////////////////////////////////////////////
+function sendData() {
+  var today = new Date();
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "zamanAl?chromedanzamanbilgisi="+today.getTime(), true);// esp tarafindaki kod = server.on("/zamanAl", espyeZamanAl)
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="javascritin calistirildigi sistemden ESP ye zaman alindi"){
+                                            var text = document.getElementById("button button1").firstChild;
+                                            text.data ="Kayıt yapıyor";}
+                                                                                          }
+                                      };
+
+  }
+  function espzamankontrol() {
+  
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "zamanAl", true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="javascritin calistirildigi sistemden ESP ye zaman alindi"){
+                                            var text = document.getElementById("button button1").firstChild;
+                                            text.data ="Kayıt yapıyor";}
+                                                                                          }
+                                      };
+
+  }
+
+
+
+</script>

@@ -1,0 +1,80 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="http://127.0.0.1:8887/d3.v4.min.js"></script>
+
+<!-- Create a div where the graph will take place -->
+
+
+<html>
+<head>
+
+<style>
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(50px, auto);
+}
+.one {
+  grid-column: 1 /3;
+  grid-row: 2;
+  text-align: center;
+  
+}
+.two { 
+  grid-column: 1 /3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+ 
+  <div class="one" style="background-color: #afe8ff"; >
+    <span id="sptitle1" style="font-size :20px;font-weight: bold;"> sinüs eğrisi</span><br>
+    <span id="sinus_d3_ile" style="font-size :20px;font-weight: bold;"></span><br>
+  </div>
+  <div class="two" style="background-color: #0dcfc5"; >
+    <span id="title2" style="font-size :20px;font-weight: bold;">span-başlık5</span><br>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+<script>
+
+d3.json("http://127.0.0.1:8887/zdata9.json",function(data) {
+
+
+ 
+  var string5="";
+  for (zzz in data) {
+    var string6="::"+data[zzz]["x"]+"<br/>";
+    string5=string5+string6;
+//console.log(zzz+": " + data[zzz]["x"]); 
+} 
+document.getElementById("title2").innerHTML=string5;
+var string7="";
+  for (zzz in data) {
+    var string8="::"+data[zzz]["y"]+"<br/>";
+    string7=string7+string8;
+//console.log(zzz+": " + data[zzz]["x"]); 
+} 
+document.getElementById("sptitle1").innerHTML=string7;
+
+
+})
+
+</script>
