@@ -1,0 +1,198 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src='d3.v4.min.js'></script>
+
+<!-- Create a div where the graph will take place -->
+<html>
+<head>
+
+<style>
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(50px, auto);
+}
+.one {
+  grid-column: 1 /5;
+  grid-row: 2;
+  text-align: center;
+  
+}
+.two { 
+  grid-column: 1 /3;
+  grid-row: 1;
+  text-align: center;
+}
+.three { 
+  grid-column: 3 /5;
+  grid-row: 1;
+  text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+ 
+  <div class="one" style="background-color: #afe8ff"; >
+    <span id="sptitle1" style="font-size :20px;font-weight: bold;"> sıcaklık</span><br>
+    <span id="my_dataviz" style="font-size :20px;font-weight: bold;"></span><br>
+  </div>
+  <div class="two" style="background-color: #0dcfc5"; >
+    <span id="title2" style="font-size :40px;font-weight: bold;"> saat = </span>
+    <span id="title3" style="font-size :40px;font-weight: bold;"> aa </span><br>
+    <button id="button button1" onclick="sendData()" style="background-color: rgb(0, 183, 255); font-size : 20px;font-weight: bold;width: 40%; height: 80% ;">Kayıt Basla</button>
+  </div>
+  <div class="three" style="background-color: #0dcfc5"; >
+    <span id="title4" style="font-size :40px;font-weight: bold;color:#ce474e ;"> sıcaklık = </span>
+    <span id="title5" style="font-size :40px;font-weight: bold;color:#ce474e ;"> bb </span><br>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+
+// set the dimensions and margins of the graph//ok
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 640 - margin.left - margin.right,
+    height = 640 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")//ok
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+bb =function(a) {
+  var date = new Date(null); 
+    date.setSeconds(a);
+    var saat=date.getHours();
+    date.setHours(saat+1);
+    return date;
+    //return timeString
+  } 
+  var t1=0;// x scale ilk degerler. sonradan butona basince yeni degerler ataniyor
+  var t2=0;
+  var t3=0;
+  var t4=0;
+  
+
+//? sekme yenilenmesinde kaldigi yerden devam etsin istiyorum ama daha olmadi
+  function getData(espdenokuyer) {//?
+  var xhttp1 = new XMLHttpRequest();
+  xhttp1.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="1"){
+                                            var text = document.getElementById("button button1").firstChild;
+                                            text.data ="Kayıt yapıyor";
+                                            setInterval(aldata,1000);
+                                            t1=t3;
+                                            t2=t4
+                                            }
+                                            console.log("gggggjjjjj");
+                                             t1=t3;//?
+                                             t2=t4;//?                                             }
+                                          
+                                          };
+    xhttp1.open("GET",espdenokuyer,true);
+    xhttp1.send(); 
+    return   this.responseText        
+                    }
+  }
+   getData("setLED") ;//?
+//?
+  function aldata(){//2019-11-15 te ekledim setInterval icin
+
+d3.json("data5.json",function(data) {
+
+	var tdata=[];
+  var zdata=[];
+
+	for (zzz in data["x"]) {
+    tdata.push ({"x":data["x"][zzz],"y":data["y"][zzz]});
+    zdata.push ({"x":bb(data["x"][zzz]),"y":data["y"][zzz]});
+    }
+    t3=bb(data["x"][0]);//?
+    a1=t3.getMinutes();//?
+    t4=new Date(t3);//?
+    t4.setMinutes(a1+10,0,0);//?
+	//document.getElementById("title5").innerHTML=bb(data["x"][Object.keys(data["x"]).length-1]).getMinutes();// son alınan sicakligi title 5 e yaz
+  document.getElementById("title5").innerHTML=data["y"][Object.keys(data["y"]).length-1];
+  data=zdata 
+    //console.log("******",t1,"***",t2,"||");
+  
+var x = d3.scaleTime()
+      .domain([t1,t2])//bb(6000) de tam
+      .range([ 0, width ]);
+      
+    svg.append("g")
+      .style("font", "20px times")// eksen tickleri font buyuklugu
+      .attr("transform", "translate(0," + (height/2) + ")")
+      .call(d3.axisBottom(x)//https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
+        .tickFormat(d3.timeFormat("%I:%M")))
+      .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-90)");
+
+    // Add Y axis
+var y = d3.scaleLinear()
+      .domain([-40,40])
+      .range([ height,0]);
+    svg.append("g")
+      .style("font", "20px times")// eksen tickleri font buyuklugu
+      .call(d3.axisLeft(y));  
+  
+    svg
+      .append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#0d51cf")
+      .attr("stroke-width", 2.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.x) })
+        .y(function(d) { return y(d.y) })
+        )
+
+})
+
+
+var today = new Date();//sistem zamanini cekiyor
+      var mm= Math.floor(Math.random() * 255)
+      var uu= (mm).toString(2);
+      document.getElementById("title3").innerHTML=today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+}
+var m=0;
+function sendData() {
+  setInterval(aldata,1000);
+  var today = new Date();
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "setLED?xxx="+today.getTime(), true);// xxx arduino kounda, setLED arduino kodundan
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="1"){
+                                            var text = document.getElementById("button button1").firstChild;
+                                            text.data ="Kayıt yapıyor";}
+                                                                                          }
+                                         };
+  if(m==0){
+  t1=new Date();// t1 ve t2 gloval degisken yukarida tanimlandi
+  a1=t1.getMinutes();
+  t2=new Date(t1);
+  t2.setMinutes(a1+10,0,0);
+   }
+  m=m+1;
+}
+</script>

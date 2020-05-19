@@ -1,0 +1,76 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src='d3.v4.min.js'></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+
+<script>
+
+// set the dimensions and margins of the graph//ok
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")//ok
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+  setInterval(aldata,500);
+  function aldata(){//2019-11-15 te ekledim setInterval icin
+//Read the data
+d3.json("data5.json",function(data) {
+	// 1 aydir istedigim json formatindaki datayi cizdirmek icin ugrastim. cozum asagiaki 3 satir sadece
+	var tdata=[];
+	// zsin json datasini istediğim formata cevirmek icin bos tdata bir listesi olusturdum
+	for (zzz in data["x"]) {tdata.push ({"x":data["x"][zzz],"y":data["y"][zzz]});}
+	// zsin.json nin formati {"x":[1,2,3],"y":[4,5,6]} seklinde bir dict veya object formati
+	// d3.js nin istedigi format ise [{"x":1,"y":4},{"x":2,"y":5},{"x":3,"y":6}] seklinde
+	// zsin i bu formata donusturmek icin- for(i in listem){ komutlar } -komutunu kullandim.burada i listem in 0 dan baslayark indislerinin degerini alir
+	// datam={"x":[1,2,3],"y":[4,5,6]} bir dict. bu dict"obj" 2 tane key i var x ve y
+	// datam.["x"] ise datam ın x keyine ait degeri veriyor
+	data=tdata
+    
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain([0,50])
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0,40])
+      .range([ height,0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+
+
+    // Add the line
+    svg
+      .append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-width", 4.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.x) })
+        .y(function(d) { return y(d.y) })
+        )
+
+})
+}
+
+</script>
