@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<script src="p5.min.js"></script>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-size: 40%;
+        }
+        
+        #main {
+            display: table;
+            width: 300px;
+            margin: auto;
+            padding: 10px 10px 10px 10px;
+            border: 3px solid blue;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        #BTN_LED {
+            width: 200px;
+            height: 40px;
+            font-size: 110%;
+        }
+        
+        p {
+            font-size: 75%;
+        }
+    </style>
+
+    <title>Websockets</title>
+</head>
+
+<body>
+    <div id="main">
+        <h3>AAAAAAAAAAAAAA</h3>
+        <p>X ekseni = <span id="rd">---</span></p>
+        <p>Y ekseni = <span id="rd2">---</span></p>
+        <p>basinc = <span id="rd3">---</span></p>
+        <input id="button2" onclick=change(); type="button" value="sayi gonder"></input>
+        <br />
+    </div>
+</body>
+
+</html>
+
+<script>
+    var Socket;
+
+    var sayi1;
+    sayi1 = 0;
+
+    function init() {
+        Socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+        Socket.onmessage = function(event) {
+            processReceivedCommand(event);
+        };
+    }
+    var str11 = [0, 0, 0];
+
+    function processReceivedCommand(evt) {
+        var str1 = evt.data;
+        str11 = str1.split(",");
+        document.getElementById("rd").innerHTML = str11[0];
+        document.getElementById("rd2").innerHTML = str11[1];
+        document.getElementById("rd3").innerHTML = str11[2];
+        //sayi1 = sayi1 + 1;
+        //sendText(sayi1);
+        return parseInt(evt.data);
+    }
+
+    function sendText(data) {
+        Socket.send(data);
+    }
+
+    window.onload = function(e) {
+        init();
+    };
+
+    /////////////////////////////////////////////////7
+    function setup() {
+        createCanvas(1280, 740);
+        console.log("hhhhhh1");
+    }
+
+    function draw() {
+        var xx = parseInt(str11[0]);
+        var yy = parseInt(str11[1]);
+        var zz = parseInt(str11[2]);
+        fill(xx / 3, yy / 2.5, zz / 1.5);
+        ellipse(xx, 600 - yy, zz / 2, zz / 2);
+        //console.log(parseInt(str11[0]));
+    }
+
+    function change() //2.tarz
+    {
+        sayi1 = sayi1 + 1;
+        sendText(sayi1);
+    }
+    /////////////////////////////////////////////////////////////////////
+</script>

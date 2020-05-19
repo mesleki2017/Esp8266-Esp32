@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-size: 120%;
+        }
+        
+        #main {
+            display: table;
+            width: 300px;
+            margin: auto;
+            padding: 10px 10px 10px 10px;
+            border: 3px solid blue;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        #BTN_LED {
+            width: 200px;
+            height: 40px;
+            font-size: 110%;
+        }
+        
+        p {
+            font-size: 75%;
+        }
+    </style>
+
+    <title>Websockets</title>
+</head>
+
+<body>
+    <div id="main">
+        <h3>AAAAAAAAAAAAAA</h3>
+        <p>X ekseni = <span id="rd">---</span></p>
+        <p>Y ekseni = <span id="rd2">---</span></p>
+        <br />
+    </div>
+</body>
+
+<script>
+    var Socket;
+    var Socket2;
+
+    function init() {
+        Socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+        Socket.onmessage = function(event) {
+            processReceivedCommand(event);
+        };
+        Socket2 = new WebSocket("ws://" + window.location.hostname + ":82/");
+        Socket2.onmessage = function(event) {
+            processReceivedCommand2(event);
+        };
+    }
+
+    function processReceivedCommand(evt) {
+        document.getElementById("rd").innerHTML = evt.data;
+    }
+
+    function processReceivedCommand2(evt) {
+        document.getElementById("rd2").innerHTML = evt.data;
+    }
+
+    function sendText(data) {
+        Socket.send(data);
+    }
+
+    window.onload = function(e) {
+        init();
+    };
+</script>
+
+</html>

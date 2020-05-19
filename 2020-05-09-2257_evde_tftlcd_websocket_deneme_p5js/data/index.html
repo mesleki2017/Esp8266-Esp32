@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<script src="p5.min.js"></script>
+<script src="doorbell.mp3 " type="audio/mpeg"></script>
+<script src="doorbell.ogg" type="audio/ogg"></script>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-size: 60%;
+        }
+        
+        #main {
+            display: table;
+            width: 300px;
+            margin: auto;
+            padding: 10px 10px 10px 10px;
+            border: 3px solid blue;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        #BTN_LED {
+            width: 200px;
+            height: 40px;
+            font-size: 110%;
+        }
+        
+        p {
+            font-size: 75%;
+        }
+    </style>
+
+    <title>Websockets</title>
+</head>
+
+<body>
+    <div id="main">
+        <h3>AAAAAAAAAAAAAA</h3>
+        <p>X ekseni = <span id="rd">---</span></p>
+        <p>Y ekseni = <span id="rd2">---</span></p>
+        <p>basinc = <span id="rd3">---</span></p>
+        <button onclick="playAudio()" type="button">Play Audio</button>
+        <button onclick="pauseAudio()" type="button">Pause Audio</button>
+        <br />
+    </div>
+</body>
+
+</html>
+
+<script>
+    var Socket;
+    var xy = new Audio("doorbell.mp3");
+    var sayi1;
+    sayi1 = 0;
+
+    function init() {
+        Socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+        Socket.onmessage = function(event) {
+            processReceivedCommand(event);
+        };
+    }
+    var str11 = [0, 0, 0];
+
+    function processReceivedCommand(evt) {
+        var str1 = evt.data;
+        str11 = str1.split(",");
+        document.getElementById("rd").innerHTML = str11[0];
+        document.getElementById("rd2").innerHTML = str11[1];
+        document.getElementById("rd3").innerHTML = str11[2];
+
+        //return parseInt(evt.data);
+    }
+
+    function sendText(data) {
+        Socket.send(data);
+    }
+
+    window.onload = function(e) {
+        init();
+    };
+
+    /////////////////////////////////////////////////7
+    var xx = parseInt(str11[0]);
+    var yy = parseInt(str11[1]);
+    var zz = parseInt(str11[2]);
+    ///////////////////////////////////////////////////////
+
+    function playAudio() {
+        //xy.play();
+        console.log("sesss var");
+    }
+
+    function pauseAudio() {
+        //xy.muted();
+    }
+
+    function setup() {}
+
+    function draw() {
+        xx = parseInt(str11[0]);
+        if (xx > 300) {
+            console.log("dsfdsdfs");
+            xy.play();
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
+</script>

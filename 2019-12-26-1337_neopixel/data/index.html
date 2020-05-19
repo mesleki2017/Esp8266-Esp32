@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<script src="jscolor.js"></script>
+
+
+<button class="jscolor {onFineChange:'inputRenkGuncelle(this)',width:300,height:300}"  style="width:400px; height:400px;">asd</button>
+
+<button class="jscolor {onFineChange:'buttonRenkGuncelle(this)',width:300,height:300}"  style="width:400px; height:400px;"></button>
+
+<button id="button1" onclick=change(); style="background-color:#00bffe; font-size : 20px;font-weight: bold;width: 40%; height: 80% ;">parla</button>
+
+</body>
+</html>
+
+<script>
+
+
+function inputRenkGuncelle(picker) {
+  renkGonderSolR(picker.rgb[0]);
+  renkGonderSolG(picker.rgb[1]);
+  renkGonderSolB(picker.rgb[2]);
+    console.log("inputtan(R,G,B)="+Math.round(picker.rgb[0])+","+Math.round(picker.rgb[1])+","+Math.round(picker.rgb[2]))
+}
+
+function buttonRenkGuncelle(picker) {
+  renkGonderSagR(picker.rgb[0]);
+  renkGonderSagG(picker.rgb[1]);
+  renkGonderSagB(picker.rgb[2]);
+console.log("butondan(R,G,B)="+Math.round(picker.rgb[0])+","+Math.round(picker.rgb[1])+","+Math.round(picker.rgb[2]))
+}
+
+
+
+function renkGonderSolR(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "RcolorAlSol?RcolorSol="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="RcolorAlindiSol"){
+                                                console.log("RcolorAlindiSol");
+                                           }
+                                                                                          }
+                                      };
+
+  }
+
+  function renkGonderSolG(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "GcolorAlSol?GcolorSol="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="GcolorAlindiSol"){
+                                            console.log("GcolorAlindiSol");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+  function renkGonderSolB(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "BcolorAlSol?BcolorSol="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="BcolorAlindiSol"){
+                                            console.log("BcolorAlindiSol");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+
+  function renkGonderSagR(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "RcolorAlSag?RcolorSag="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="RcolorAlindiSag"){
+                                                console.log("RcolorAlindiSag");
+                                           }
+                                                                                          }
+                                      };
+
+  }
+
+  function renkGonderSagG(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "GcolorAlSag?GcolorSag="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="GcolorAlindiSag"){
+                                            console.log("GcolorAlindiSag");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+  function renkGonderSagB(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "BcolorAlSag?BcolorSag="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="BcolorAlindiSag"){
+                                            console.log("BcolorAlindiSag");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+  function change() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "parlaAl?ParlaEsp="+"parla", true);
+    xhttp.send();
+    xhttp.onreadystatechange = function() {
+                                            if (this.readyState == 4 && this.status == 200) {
+                                              if(this.responseText=="parlaEspAlindi"){
+                                              console.log("parlaEspAlindi");
+                                              }
+                                                                                            }
+                                        };
+  
+    }
+  
+</script>
+

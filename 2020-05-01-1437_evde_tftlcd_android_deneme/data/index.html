@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: 20px auto 20px;
+            grid-template-rows: auto auto;
+            background-color: #46ca5c;
+            padding: 10px;
+        }
+        
+        .grid-item1 {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+            background-color: #2dc9dd;
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 30px;
+            text-align: center;
+        }
+        
+        .grid-item2 {
+            grid-column: 2 / 3;
+            grid-row: 2/ 2;
+            background-color: #2dc9dd;
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="grid-container">
+
+        <div class="grid-item1">
+
+            <input id="yazigir1" style="font-size :60px;font-weight: bold;"></input>
+            <button id="button1" onclick=test(); style="background-color:#fea500; font-size : 60px;font-weight: bold;width: 40%; height: 80% ;">lcd arkaplan rengi</button><br>
+
+        </div>
+        <div class="grid-item2">
+            <textarea id="yazigir2" style="font-size :60px;font-weight: bold; width: 800px; height: 400px;" rows="=4" cols="50"></textarea><br>
+            <button id="button2" onclick=test1(); style="background-color:#08fe00; font-size : 60px;font-weight: bold;width: 40%; height: 80% ;">yazi gonder</button><br>
+        </div>
+
+
+    </div>
+
+</html>
+
+<script>
+    function test() {
+        var xxxx = document.getElementById("yazigir1").value;
+        console.log(xxxx);
+        renkGonderSagR(xxxx);
+    }
+
+    function test1() {
+        var xxxx = document.getElementById("yazigir2").value;
+        console.log(xxxx);
+        espyeYaziGonder(xxxx);
+    }
+
+    function renkGonderSagR(ffff) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "RcolorAlSag?RcolorSag=" + ffff, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "RcolorAlindiSag") {
+                    console.log("RcolorAlindiSag");
+                }
+            }
+        };
+    }
+
+    function espyeYaziGonder(ffff) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "YaziAl?espyeGelenYazi=" + encodeURIComponent(ffff), true); //javascript yenibilgi :encodeURIComponent:
+        //https://stackoverflow.com/questions/23016326/how-to-preserve-new-lines-with-xmlhttp
+        // encodeURIComponent kullanmassak satirbasilari gondermiyor. simdiye kadar buna ihtiyacim olmamisti
+        //ilk defa buarada kullandim.
+        xhttp.send();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "Yyazi1alindi") {
+                    console.log("yazi1alindi");
+                }
+            }
+        };
+    }
+</script>

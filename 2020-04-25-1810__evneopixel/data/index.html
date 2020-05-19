@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<script src="jscolor.js"></script>
+
+<html>
+
+<head>
+    <style>
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+            grid-auto-rows: minmax(100px, auto);
+        }
+        
+        .one {
+            grid-column: 1;
+            grid-row: 2;
+            text-align: center;
+        }
+        
+        .two {
+            grid-column: 2;
+            grid-row: 2;
+            text-align: center;
+        }
+        
+        .three {
+            grid-column: 1/3;
+            grid-row: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="one" style="background-color: #ebc137;" ;>
+            <p title="title2" style="font-size: 30px; font-weight: bold;">
+                1.Gurup LED Rengi Seçimi<br />
+                <button class="jscolor {onFineChange:'inputRenkGuncelle(this)',width:300,height:300}" style="width: 400px; height: 400px;"></button>
+            </p>
+        </div>
+
+        <div class="two" style="background-color: #eb37a0;" ;>
+            <p title="title2" style="font-size: 30px; font-weight: bold;">
+                2.Gurup LED Rengi Seçimi<br />
+                <button class="jscolor {onFineChange:'buttonRenkGuncelle(this)',width:300,height:300}" style="width: 400px; height: 400px;"></button>
+            </p>
+        </div>
+
+        <div class="three" style="background-color: #6d37eb;" ;>
+            <button id="button1" onclick="change();" style="
+            background-color: #00bffe;
+            font-size: 30px;
+            font-weight: bold;
+            width: 40%;
+            height: 80%;
+          ">
+          RengaRenk
+        </button>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    function inputRenkGuncelle(picker) {
+        renkGonderSolR(picker);
+    }
+
+    function buttonRenkGuncelle(picker) {
+        renkGonderSagR(picker);
+    }
+
+    function renkGonderSolR(picker) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "RcolorAlSol?RcolorSol=" + picker, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "RcolorAlindiSol") {
+                    console.log("RcolorAlindiSol");
+                }
+            }
+        };
+    }
+
+    function renkGonderSagR(picker) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "RcolorAlSag?RcolorSag=" + picker, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "RcolorAlindiSag") {
+                    console.log("RcolorAlindiSag");
+                }
+            }
+        };
+    }
+
+    function change() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "parlaAl?ParlaEsp=" + "parla", true);
+        xhttp.send();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "parlaEspAlindi") {
+                    console.log("parlaEspAlindi");
+                }
+            }
+        };
+    }
+</script>

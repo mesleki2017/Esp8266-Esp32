@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<script src="jscolor.js"></script>
+
+
+<input class="jscolor {onFineChange:'update(this)' }" value="ffcc00" style="width: auto; height: 200px;">
+
+</body>
+</html>
+
+<script>
+function update(picker) {
+
+    sendDataR(picker.rgb[0]);
+    sendDataG(picker.rgb[1]);
+    sendDataB(picker.rgb[2]);
+}
+function sendDataR(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "RcolorAl?Rcolor="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="RcolorAlindi"){
+                                                console.log("RcolorAlindi");
+                                           }
+                                                                                          }
+                                      };
+
+  }
+
+  function sendDataG(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "GcolorAl?Gcolor="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="GcolorAlindi"){
+                                            console.log("GcolorAlindi");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+  function sendDataB(picker) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "BcolorAl?Bcolor="+picker, true);
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+                                          if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText=="BcolorAlindi"){
+                                            console.log("BcolorAlindi");
+                                            }
+                                                                                          }
+                                      };
+
+  }
+
+
+</script>
+

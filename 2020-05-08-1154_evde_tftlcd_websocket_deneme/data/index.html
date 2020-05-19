@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-size: 120%;
+        }
+        
+        #main {
+            display: table;
+            width: 300px;
+            margin: auto;
+            padding: 10px 10px 10px 10px;
+            border: 3px solid blue;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        #BTN_LED {
+            width: 200px;
+            height: 40px;
+            font-size: 110%;
+        }
+        
+        p {
+            font-size: 75%;
+        }
+        
+        canvas {
+            border: 1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+    </style>
+
+    <title>Websockets</title>
+</head>
+
+<body>
+    <div id="main">
+        <h3>AAAAAAAAAAAAAA</h3>
+        <p>X ekseni = <span id="rd">---</span></p>
+        <p>Y ekseni = <span id="rd2">---</span></p>
+        <p>basinc = <span id="rd3">---</span></p>
+        <br />
+    </div>
+</body>
+
+</html>
+<script>
+    var Socket;
+
+    var sayi1;
+    sayi1 = 0;
+
+    function init() {
+        Socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+        Socket.onmessage = function(event) {
+            processReceivedCommand(event);
+        };
+    }
+
+    function processReceivedCommand(evt) {
+        var str1 = evt.data;
+        var str11 = str1.split(",");
+        document.getElementById("rd").innerHTML = str11[0];
+        document.getElementById("rd2").innerHTML = str11[1];
+        document.getElementById("rd3").innerHTML = str11[2];
+
+        updateGameArea(900 - parseInt(str11[0]));
+        updateGameArea2(parseInt(str11[1]));
+        return parseInt(evt.data);
+    }
+
+    function sendText(data) {
+        Socket.send(data);
+    }
+
+    window.onload = function(e) {
+        init();
+        startGame();
+    };
+
+    /////////////////////////////////////////////////7
+    var myGamePiece;
+
+    function startGame() {
+        myGamePiece = new component(30, 30, "blue", 35, 35);
+        myGameArea.start();
+    }
+
+    var myGameArea = {
+        canvas: document.createElement("canvas"),
+        start: function() {
+            this.canvas.width = 900;
+            this.canvas.height = 600;
+            this.context = this.canvas.getContext("2d");
+            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        },
+        stop: function() {
+            clearInterval(this.interval);
+        },
+        clear: function() {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        },
+    };
+
+    function component(width, height, color, x, y, type) {
+        this.type = type;
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        this.update = function() {
+            ctx = myGameArea.context;
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        };
+        this.newPos = function(xxx) {
+            this.x = xxx;
+        };
+        this.newPos2 = function(yyy) {
+            this.y = yyy;
+        };
+    }
+
+    function updateGameArea(xx2) {
+        myGameArea.clear();
+        myGamePiece.newPos(xx2);
+        myGamePiece.update();
+    }
+
+    function updateGameArea2(yy2) {
+        myGameArea.clear();
+        myGamePiece.newPos2(yy2);
+        myGamePiece.update();
+    }
+</script>
